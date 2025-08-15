@@ -8,37 +8,57 @@
 </head>
 <body class="bg-light">
     <div class="container py-4">
+        <a href="/" class="btn btn-warning">
+            Home
+        </a>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">📚 Kategori Produk</h2>
+            <a href="{{ route('kategori-produk.create') }}" class="btn btn-success">
+                + Tambah Kategori
+            </a>
         </div>
-		<div>
-            <a href="{{ route('kategori-produk.create') }}" class="btn btn-success me-2">Tambah Kategori</a>
-        </div>
-        <!-- Book Table -->
+
         <div class="table-responsive">
             <table class="table table-striped table-bordered align-middle text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th>Kategori ID</th>
+                        <th>No</th>
                         <th>Nama Kategori</th>
                         <th>Jenis</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($kategori as $index => $kategori)
+                    @forelse($kategori as $index => $item)
                         <tr>
-							<td>{{ $kategori->id }}</td>
-                            <td>{{ $kategori->nama_kategori }}</td>
-                            <td>{{ $kategori->jenis }}</td>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $item->nama_kategori }}</td>
+                            <td>{{ $item->jenis }}</td>
+                            <td class="d-flex justify-content-center gap-2">
+                                <a href="{{ route('kategori-produk.edit', $item->id) }}" 
+                                   class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
+                                <form action="{{ route('kategori-produk.destroy', $item->id) }}" 
+                                      method="POST" 
+                                      onsubmit="return confirm('Yakin ingin menghapus kategori ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-muted">No produks found.</td>
+                            <td colspan="4" class="text-muted">Tidak ada kategori ditemukan.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-        </div>    
+        </div>
+
     </div>
 </body>
 </html>

@@ -13,8 +13,8 @@ class Produk extends Model
 		'jumlah',
 		'category_id',
 	];
-	public function kategoriProduks()
-    {
-        return $this->belongsTo(KategoriProduk::class);
-    }
+	public function kategori()
+	{
+	    return $this->belongsTo(KategoriProduk::class, 'category_id');
+	}
 }

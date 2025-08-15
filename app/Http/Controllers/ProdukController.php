@@ -10,38 +10,56 @@ class ProdukController extends Controller
 {
 	public function index ()
 	{
-		$data = Produk::all();
-		$produks = json_decode($data);
+		$produks = Produk::with('kategori')->get();
 		return view('produk.index', compact('produks'));
 	}
 	public function create()
-	{
-		return view();
-	}
-	public function store (Request $request)
-	{
-		$request->validate([
-			'nama' => 'required',
-			'jumlah'=> 'required',
-			'kategori' => 'required'
-		]);
-		$addKategory = Produk::create($request->all());
-		return response()->json($addKategory, 200);
-	}
+    {
+        $kategori = KategoriProduk::all();
+        return view('produk.create', compact('kategori'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nama'  => 'required|string',
+            'category_id'  => 'required',
+            'jumlah'        => 'required|numeric',
+        ]);
+
+        Produk::create([
+            'nama' => $validated['nama'],
+            'category_id' => $validated['category_id'],
+            'jumlah'       => $validated['jumlah'],
+        ]);
+
+        return redirect()
+            ->route('produk.index')
+            ->with('success', 'Produk berhasil ditambahkan.');
+    }
 	public function edit($id)
 	{
-		return view('');
+	    $produk = Produk::findOrFail($id);
+	    $kategori = KategoriProduk::all();
+	    return view('produk.edit', compact('produk', 'kategori'));
 	}
 
-	public function update($id, Request $request)
+	public function update(Request $request, $id)
 	{
-		$produk = Produk::findOrFail($id);
-		$request->validate([
-			'nama' => 'required',
-			'jumlah'=> 'required',
-			'kategori' => 'required'
-		]);
-		$produk->update($request->all());
+	    $request->validate([
+	        'nama' => 'required|string',
+	        'jumlah' => 'required|integer',
+	        'category_id' => 'required',
+	    ]);
+
+	    $produk = Produk::findOrFail($id);
+	    $produk->update([
+	        'nama' => $request->nama,
+	        'jumlah' => $request->jumlah,
+	        'category_id' => $request->category_id,
+	    ]);
+
+	    return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
 	}
 	public function destroy($id)
 	{

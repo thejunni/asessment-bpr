@@ -19,28 +19,39 @@ class KategoriProdukController extends Controller
 	}
 	public function store(Request $request)
 	{
-		dd($request->all());
-		$request->validate([
-			'nama_kategori' => 'required',
-			'jenis'=> 'required',
-		]);
-		$addKategory = KategoriProduk::create($request->all());
-		return response()->json($addKategory, 200);
+	    $validated = $request->validate([
+	        'nama_kategori' => 'required|string',
+	        'jenis'         => 'required|string',
+	    ]);
+	    KategoriProduk::create([
+	        'nama_kategori' => $validated['nama_kategori'],
+	        'jenis'         => $validated['jenis'],
+	    ]);
+	    return redirect()
+	        ->route('kategori-produk.index')
+	        ->with('success', 'Kategori berhasil ditambahkan.');
 	}
 	public function edit($id)
 	{
-		return view('');
+	    $kategori = KategoriProduk::findOrFail($id);
+	    return view('kategoriProduk.edit', compact('kategori'));
 	}
-
-	public function update($id, Request $request)
+	public function update(Request $request, $id)
 	{
-		$kategoriProduk = KategoriProduk::findOrFail($id);
-		$request->validate([
-			'nama' => 'required',
-			'jumlah'=> 'required',
-			'kategori' => 'required'
-		]);
-		$kategoriProduk->update($request->all());
+	    $validated = $request->validate([
+	        'nama_kategori' => 'required|string',
+	        'jenis'         => 'required|string',
+	    ]);
+
+	    $kategori = KategoriProduk::findOrFail($id);
+	    $kategori->update([
+	        'nama_kategori' => $validated['nama_kategori'],
+	        'jenis'         => $validated['jenis'],
+	    ]);
+
+	    return redirect()
+	        ->route('kategori-produk.index')
+	        ->with('success', 'Kategori berhasil diperbarui.');
 	}
 	public function destroy($id)
 	{

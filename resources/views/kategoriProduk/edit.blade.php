@@ -3,40 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Kategori</title>
+    <title>Edit Kategori</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container py-5">
-        <h2 class="text-center mb-4">Tambah Kategori</h2>
+        <h2 class="text-center mb-4">Edit Kategori</h2>
 
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <!-- Form Create -->
-                <form id="kategoriForm" method="POST" action="{{ route('kategori-produk.store') }}">
+                <form id="kategoriForm" method="POST" action="{{ route('kategori-produk.update', $kategori->id) }}">
                     @csrf
+                    @method('PUT')
+
                     <div class="mb-3">
                         <label for="nama_kategori" class="form-label">Nama Kategori</label>
-                        <input type="text" name="nama_kategori" id="nama_kategori" class="form-control" required>
+                        <input type="text" name="nama_kategori" id="nama_kategori" 
+                               class="form-control" value="{{ old('nama_kategori', $kategori->nama_kategori) }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="jenis" class="form-label">Jenis</label>
                         <select name="jenis" id="jenis" class="form-select" required>
-                            <option value="Bebas">Bebas</option>
-                            <option value="Acak">Acak</option>
+                            <option value="Bebas" {{ old('jenis', $kategori->jenis) == 'Bebas' ? 'selected' : '' }}>Bebas</option>
+                            <option value="Acak" {{ old('jenis', $kategori->jenis) == 'Acak' ? 'selected' : '' }}>Acak</option>
                         </select>
                     </div>
 
                     <div class="d-grid">
                         <button id="submitBtn" type="submit" class="btn btn-primary">
-                            <span id="btnText">Tambah</span>
+                            <span id="btnText">Perbarui</span>
                             <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         </button>
                     </div>
                 </form>
+
+                <!-- Back Button -->
                 <div class="text-center mt-4">
-                    <a href="{{ url('/kategori-produk') }}" class="btn btn-secondary">← Back</a>
+                    <a href="{{ route('kategori-produk.index') }}" class="btn btn-secondary">← Back</a>
                 </div>
             </div>
         </div>
@@ -54,7 +58,7 @@
 
         form.addEventListener('submit', function () {
             submitBtn.disabled = true;
-            btnText.textContent = 'Menambahkan...';
+            btnText.textContent = 'Memperbarui...';
             btnSpinner.classList.remove('d-none');
         });
     </script>
