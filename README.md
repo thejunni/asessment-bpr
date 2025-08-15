@@ -12,3 +12,4 @@
 1. COMPOSER INSTALL
 2. MySql Database
 3. Generate Key (php artisan key:generate)
+4. Karena sudah ada seeder bisa gunakan  ---- "php artisan db:seed --class=DatabaseSeeder"
