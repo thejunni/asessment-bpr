@@ -55,6 +55,10 @@ class KategoriProdukController extends Controller
 	}
 	public function destroy($id)
 	{
+	    $kategori = KategoriProduk::findOrFail($id);
+	    $kategori->delete();
 	
+	    return redirect()->route('kategori-produk.index')
+	                     ->with('success', 'Kategori berhasil dihapus.');
 	}
 }
