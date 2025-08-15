@@ -11,4 +11,4 @@
 
 1. COMPOSER INSTALL
 2. MySql Database
-3. Generate Key (php artisan key:generate
+3. Generate Key (php artisan key:generate)
